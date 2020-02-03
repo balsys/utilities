@@ -1,0 +1,144 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Test</title>
+    <style type="text/css">
+      body { font: 13px Arial; }
+      table { border-collapse: collapse; }
+      table th { border-bottom: 1px solid #999; padding: 2px 10px; }
+      table td { border-bottom: 1px solid #ccc; padding: 2px 10px; text-align: center; font-family: Monospace; width: 100px; }
+      table input { width: 100px; font-family: Monospace; text-align: center; }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+      
+      function hexToRgb(hex) {
+        var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? {
+          r: parseInt(result[1], 16),
+          g: parseInt(result[2], 16),
+          b: parseInt(result[3], 16)
+        } : null;
+      }
+
+      function brightness(color, percent) {
+
+        r = hexToRgb(color).r;
+        g = hexToRgb(color).g;
+        b = hexToRgb(color).b;
+
+        if (percent >= 0) {
+          r = Math.floor(r + (255 - r) * percent / 100);
+          g = Math.floor(g + (255 - g) * percent / 100);
+          b = Math.floor(b + (255 - b) * percent / 100);
+        } else {
+          // remember $percent is negative
+          r = Math.floor(r + r * percent / 100);
+          g = Math.floor(g + g * percent / 100);
+          b = Math.floor(b + b * percent / 100);
+        }
+
+        return ("#"+r.toString(16)+g.toString(16)+b.toString(16));
+
+      }
+
+      function update() {
+        var rows = $("tr.set");
+        for (i = 0; i < rows.length; i++) {
+          var row = $(rows[i]);
+          fg = row.find("input.fg").val();
+          bg = row.find("input.bg").val();
+          row.find("td.bg").css("backgroundColor", bg).css("color", fg).html(bg);
+
+          bd = brightness(bg, -5);
+          row.find("td.bd").css("backgroundColor", bd).css("color", fg).html(bd);
+
+          fbg = brightness(bg, -10);
+          row.find("td.fbg").css("backgroundColor", fbg).css("color", fg).html(fbg);
+
+          fbd = brightness(bd, -25);
+          row.find("td.fbd").css("backgroundColor", fbd).css("color", fg).html(fbd);
+
+          hbg = fbg;
+          row.find("td.hbg").css("backgroundColor", hbg).css("color", fg).html(hbg);
+
+          hbd = brightness(bd, -12);
+          row.find("td.hbd").css("backgroundColor", hbd).css("color", fg).html(hbd);
+
+          abg = fbg;
+          row.find("td.abg").css("backgroundColor", abg).css("color", fg).html(abg);
+
+          abd = hbd
+          row.find("td.abd").css("backgroundColor", abd).css("color", fg).html(abd);
+
+          xbg = brightness(bg, -17);
+          row.find("td.xbg").css("backgroundColor", xbg).css("color", fg).html(xbg);
+
+          xbd = fbd;
+          row.find("td.xbd").css("backgroundColor", xbd).css("color", fg).html(xbd);
+        }
+
+      }
+
+      $("document").ready(function() {
+        update();
+
+        $("input").on("change", function() { update(); });
+      });
+
+
+    </script>
+  </head>
+  <body>
+
+    <h1>Bootstrap button colour calculator</h1>
+
+    <table>
+      <tr>
+        <th rowspan="2">Foreground</th>
+        <th rowspan="2">Background</th>
+        <th colspan="2">Default</th>
+        <th colspan="2">Focus</th>
+        <th colspan="2">Hover</th>
+        <th colspan="2">Active</th>
+        <th colspan="2">A+F+H</th>
+      </tr>
+      <tr>
+        <th>Background</th>
+        <th>Border</th>
+        <th>Background</th>
+        <th>Border</th>
+        <th>Background</th>
+        <th>Border</th>
+        <th>Background</th>
+        <th>Border</th>
+        <th>Background</th>
+        <th>Border</th>
+      </tr>
+    </table>
+
+  </body>
+
+
+  <script>
+    for (i = 0; i < 6; i++) {
+
+      row = '<tr class="set"><td><input type="text" class="fg" maxlength="7" value="#333333" /></td>'
+        + '<td><input type="text" class="bg" maxlength="7" value="#cccccc" /></td>'
+        + '<td class="bg"></td>'
+        + '<td class="bd"></td>'
+        + '<td class="fbg"></td>'
+        + '<td class="fbd"></td>'
+        + '<td class="hbg"></td>'
+        + '<td class="hbd"></td>'
+        + '<td class="abg"></td>'
+        + '<td class="abd"></td>'
+        + '<td class="xbg"></td>'
+        + '<td class="xbd"></td>';
+      $('table').append(row);
+
+
+    }
+
+  </script>
+</html>
