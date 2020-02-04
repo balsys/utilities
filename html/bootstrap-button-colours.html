@@ -21,6 +21,15 @@
         } : null;
       }
 
+      function paddedHex(num) {
+        retval = '';
+        if (num < 16) {
+          retval += '0';
+        } 
+        retval += num.toString(16);
+        return retval;
+      }
+
       function brightness(color, percent) {
 
         r = hexToRgb(color).r;
@@ -38,7 +47,7 @@
           b = Math.floor(b + b * percent / 100);
         }
 
-        return ("#"+r.toString(16)+g.toString(16)+b.toString(16));
+        return ("#"+paddedHex(r)+paddedHex(g)+paddedHex(b));
 
       }
 
@@ -50,19 +59,19 @@
           bg = row.find("input.bg").val();
           row.find("td.bg").css("backgroundColor", bg).css("color", fg).html(bg);
 
-          bd = brightness(bg, -5);
+          bd = brightness(bg, -20); // -10  -17
           row.find("td.bd").css("backgroundColor", bd).css("color", fg).html(bd);
 
-          fbg = brightness(bg, -10);
+          fbg = brightness(bg, -30); // -21  -26
           row.find("td.fbg").css("backgroundColor", fbg).css("color", fg).html(fbg);
 
-          fbd = brightness(bd, -25);
+          fbd = brightness(bg, -50); // -64  -59
           row.find("td.fbd").css("backgroundColor", fbd).css("color", fg).html(fbd);
 
           hbg = fbg;
           row.find("td.hbg").css("backgroundColor", hbg).css("color", fg).html(hbg);
 
-          hbd = brightness(bd, -12);
+          hbd = brightness(bg, -40); // -36  -38
           row.find("td.hbd").css("backgroundColor", hbd).css("color", fg).html(hbd);
 
           abg = fbg;
@@ -71,7 +80,7 @@
           abd = hbd
           row.find("td.abd").css("backgroundColor", abd).css("color", fg).html(abd);
 
-          xbg = brightness(bg, -17);
+          xbg = hbd
           row.find("td.xbg").css("backgroundColor", xbg).css("color", fg).html(xbg);
 
           xbd = fbd;
@@ -121,10 +130,19 @@
 
 
   <script>
+    preset = [
+      [ "#333333", "#ffffff" ],
+      [ "#ffffff", "#337ab7" ],
+      [ "#ffffff", "#5cb85c" ],
+      [ "#ffffff", "#5bc0de" ],
+      [ "#ffffff", "#f0ad4e" ],
+      [ "#ffffff", "#d9534f" ],
+    ];
+
     for (i = 0; i < 6; i++) {
 
-      row = '<tr class="set"><td><input type="text" class="fg" maxlength="7" value="#333333" /></td>'
-        + '<td><input type="text" class="bg" maxlength="7" value="#cccccc" /></td>'
+      row = '<tr class="set"><td><input type="text" class="fg" maxlength="7" value="'+ preset[i][0] +'" /></td>'
+        + '<td><input type="text" class="bg" maxlength="7" value="'+ preset[i][1] +'" /></td>'
         + '<td class="bg"></td>'
         + '<td class="bd"></td>'
         + '<td class="fbg"></td>'
